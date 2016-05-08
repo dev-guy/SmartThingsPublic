@@ -6,23 +6,27 @@
  */
 definition(
     name: "Firehose",
-    namespace: "dev-guy",
-    author: "T Linenbach",
-    description: "Sends data to a web server",
+    namespace: "smart@terris.com",
+    author: "Terris Linenbach",
+    description: "Firehose",
     category: "",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
     iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
-    oauth: [displayName: "Firehose", displayLink: ""]) {
+    oauth: true) {
     appSetting "partnerId"
-    appSetting "partnerKey"
+    appSetting "apiKey"
+    appSetting "url"
     appSetting "contactSensors"
 }
 
 preferences {
+	section("Web service") {
+		input "url", "text", title: "URL of web service"
+	}
     section("Who are you?") {
-        input "partnerId", "text", title: "Partner ID"
-        input "partnerKey", "text", title: "Partner Key"
+        input "partnerId", "text", title: "ID"
+        input "apiKey", "text", title: "Password"
     }
     section("Devices") {
         input "contactSensors", "capability.contactSensor", required: true, multiple:true
@@ -43,10 +47,16 @@ def updated() {
 }
 
 def initialize() {
-	// TODO: subscribe to attributes, devices, locations, etc.
+	contactSensors.each { contact -> 
+    	subscribe contact, "contact.open", openHandler
+    	subscribe contact, "contact.closed", closedHandler
+    }
 }
 
-def unsubscribe() {
+def openHandler(evt) {
+    log.debug "$evt.name: $evt.value"
 }
 
-// TODO: implement event handlers
+def closedHandler(evt) {
+    log.debug "$evt.name: $evt.value"
+}
