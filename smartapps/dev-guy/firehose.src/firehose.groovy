@@ -6,7 +6,7 @@
  */
 definition(
     name: "Firehose",
-    namespace: "smart@terris.com",
+    namespace: "dev-guy",
     author: "Terris Linenbach",
     description: "Firehose",
     category: "",
