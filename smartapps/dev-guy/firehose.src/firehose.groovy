@@ -1,7 +1,7 @@
 /**
  *  Firehose
  *
- *  Copyright 2016 T Linenbach
+ *  Copyright 2016 Terris Linenbach
  *
  */
 definition(
@@ -16,13 +16,17 @@ definition(
     oauth: [displayName: "Firehose", displayLink: ""]) {
     appSetting "partnerId"
     appSetting "partnerKey"
+    appSetting "contactSensors"
 }
 
-
 preferences {
-	section("Title") {
-		// TODO: put inputs here
-	}
+    section("Who are you?") {
+        input "partnerId", "text", title: "Partner ID"
+        input "partnerKey", "text", title: "Partner Key"
+    }
+    section("Devices") {
+        input "contactSensors", "capability.contactSensor", required: true, multiple:true
+    }
 }
 
 def installed() {
@@ -40,6 +44,9 @@ def updated() {
 
 def initialize() {
 	// TODO: subscribe to attributes, devices, locations, etc.
+}
+
+def unsubscribe() {
 }
 
 // TODO: implement event handlers
